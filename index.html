@@ -1,0 +1,70 @@
+<title>Programming Exercise</title>
+<body>
+	<h2 id="title">Javascript</h2>
+
+    <p>Reference Number: <input id ="reference" value="50762C09" /></p>
+    <br>
+    <button id="submit" onclick="getApi()">submit</button>
+
+    <div>
+        <p id="paynumber"></p> <br>
+        <p id="status"></p> <br>
+        <p id="actualPickupDate"></p> <br>
+        <p id="actualDeliveryDate"></p> <br>
+        <p id="originCity"></p> <br>
+        <p id="destinationCity"></p> <br>
+    </div>    
+
+	<script type="text/javascript">
+		
+        var referenceId = document.getElementById('reference');
+
+        var data = {};
+        
+        function getApi() {
+
+            var xhr = new XMLHttpRequest();
+            var api = 'https://mytms.us.dsv.com/utiservices/tracking/simple/json/reference/?id='+(referenceId.value);
+
+            var resObj;
+
+            xhr.onload = function(){
+                if(this.status === 200){
+                    try{
+                        resObj = JSON.parse(this.responseText);
+                        showData(resObj.items);
+                    } catch(e){
+                        console.warn('there was an error');
+                    }
+                } else {
+                    console.warn('did not recieve response');
+                }
+                //console.log(this.responseText);
+
+            };
+
+            xhr.open('GET',api );
+            xhr.send();
+
+        }
+
+        function showData(data) {
+
+            var paynumber = document.getElementById('paynumber');
+            var status = document.getElementById('status');
+            var actualPickupDate = document.getElementById('actualPickupDate');
+            var actualDeliveryDate = document.getElementById('actualDeliveryDate');
+            var originCity = document.getElementById('originCity');
+            var destinationCity = document.getElementById('destinationCity');
+
+            paynumber.innerText = data[0].paynumber;
+            status.innerText = data[0].status;
+            actualPickupDate.innerText = data[0].actualPickupDate;
+            actualDeliveryDate.innerText = data[0].actualDeliveryDate;
+            originCity.innerText = data[0].originCity;
+            destinationCity.innerText = data[0].destinationCity;
+
+        }
+
+	</script>
+</body>
