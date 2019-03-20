@@ -1,11 +1,30 @@
+<!-- 
+Author: Karina Enriquez
+
+Source 1:
+* Title: Ghibli App
+* Author: Rascia, Tania
+* Date: 2017
+* Availability: https://www.taniarascia.com/
+
+
+Source 2:
+* Title: HTMLElement.innerText
+* Author: Mozilla
+* Date: Mar 18, 2019
+* Availability: https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText
+
+-->
 <title>Programming Exercise</title>
 <body>
-	<h2 id="title">Javascript</h2>
+	<h2 id="title">Programming Exercise</h2>
 
     <p>Reference Number: <input id ="reference" value="50762C09" /></p>
     <br>
+    <!-- Once user Clicks button the getAPI() function in JS will execute -->
     <button id="submit" onclick="getApi()">submit</button>
 
+	<!-- sets the values of the id's-->
     <div>
         <p id="paynumber"></p> <br>
         <p id="status"></p> <br>
@@ -16,14 +35,17 @@
     </div>    
 
 	<script type="text/javascript">
-		
+
+		//points to user input at id reference to be set as referenceId
         var referenceId = document.getElementById('reference');
 
         var data = {};
         
+        //calls the function to request the datea from the API using XMLHTTPRequest
         function getApi() {
 
             var xhr = new XMLHttpRequest();
+
             var api = 'https://mytms.us.dsv.com/utiservices/tracking/simple/json/reference/?id='+(referenceId.value);
 
             var resObj;
@@ -31,6 +53,8 @@
             xhr.onload = function(){
                 if(this.status === 200){
                     try{
+
+                    	//response from API server set as resObj
                         resObj = JSON.parse(this.responseText);
                         showData(resObj.items);
                     } catch(e){
@@ -39,10 +63,10 @@
                 } else {
                     console.warn('did not recieve response');
                 }
-                //console.log(this.responseText);
 
             };
 
+			//gets the data from the API using the BaseURL and user input for referenceID
             xhr.open('GET',api );
             xhr.send();
 
@@ -57,6 +81,7 @@
             var originCity = document.getElementById('originCity');
             var destinationCity = document.getElementById('destinationCity');
 
+            //since the data is in an array, first element in array [0] is referred through its keys
             paynumber.innerText = data[0].paynumber;
             status.innerText = data[0].status;
             actualPickupDate.innerText = data[0].actualPickupDate;
